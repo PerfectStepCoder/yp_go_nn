@@ -1,6 +1,5 @@
 package engine
 
-
 func FindMaxIndices(labels [][]float32) []int {
 	// Массив для хранения индексов максимальных элементов
 	maxIndices := make([]int, len(labels))

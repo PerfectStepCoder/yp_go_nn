@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package nn_go;
+
+option go_package = "service/nn_go";
+
+// TaskOneRequest - передача изображения для классификации.
+message TaskOneRequest {
+  string taskUID = 1;  // UUID задачи в строковом формате
+  bytes image = 2;      // файл изображения в виде массива байтов
+}
+
+// TaskOneResponse - описание ответа
+message TaskOneResponse {
+  string taskUID = 1;
+  string className = 2;
+}
+

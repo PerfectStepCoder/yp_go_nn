@@ -12,6 +12,6 @@ type TaskOneRequest struct {
 }
 
 type TaskOneResponse struct {
-	TaskUID uuid.UUID `json:"taskUID"`
+	TaskUID string `json:"taskUID"`
 	Label string
 }

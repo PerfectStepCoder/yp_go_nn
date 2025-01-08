@@ -57,7 +57,7 @@ func (s *StorageInPostgres) GetAllOperators() ([]models.Operator, error) {
 
 func (s *StorageInPostgres) GetOperatorByUID(operatorUID string) (*models.Operator, error) {
 	var user models.Operator
-	if err := s.DB.Where("user_uid = ?", operatorUID).First(&user).Error; err != nil {
+	if err := s.DB.Where("operator_uid = ?", operatorUID).First(&user).Error; err != nil {
 		return &user, err
 	}
 	return &user, nil

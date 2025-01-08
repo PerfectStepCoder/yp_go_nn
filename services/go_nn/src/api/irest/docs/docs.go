@@ -230,6 +230,13 @@ const docTemplate = `{
                         "name": "file",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "UUID of the task",
+                        "name": "taskUID",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {

@@ -159,6 +159,11 @@ paths:
         name: file
         required: true
         type: file
+      - description: UUID of the task
+        in: formData
+        name: taskUID
+        required: true
+        type: string
       produces:
       - application/json
       responses:

@@ -18,6 +18,13 @@
 > export PATH="$PATH:$(go env GOPATH)/bin"  // чтобы видна была утилита
 > swag init -g cmd/main.go -o api/irest/docs // создаем документацию
 
+### GRPC
+#### Кодогенерация
+Go доступность в консоле
+> export PATH="$PATH:$(go env GOPATH)/bin"
+> cd ../internal/proto
+> protoc --go_out=./gen --go_opt=paths=source_relative --go-grpc_out=./gen --go-grpc_opt=paths=source_relative models.proto server.proto
+
 # Нейронные сети
 ### Установка ultralytics
 > conda install -c conda-forge ultralytics

@@ -20,7 +20,7 @@ func main() {
 									  "../lib/libonnxruntime.1.20.1.dylib", inputLayer, outputLayer)
 	
 	// Загрузка датасета
-	images, labels, err1 := engine.LoadDataset("/Users/dmitrii/EducationProjects/yp_go_nn/data/datasets/fashion_mnist_test.csv", 105) // labels
+	images, labels, err1 := engine.LoadDataset("../../datasets/fashion_mnist_test.csv", 105) // labels
 
 	if err1 != nil {
 		fmt.Printf("Ошибка загрузки датасета: %v\n", err1)
