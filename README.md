@@ -24,13 +24,17 @@ Go доступность в консоле
 > export PATH="$PATH:$(go env GOPATH)/bin"
 > cd ../internal/proto
 > protoc --go_out=./gen --go_opt=paths=source_relative --go-grpc_out=./gen --go-grpc_opt=paths=source_relative models.proto server.proto
+#### Запуск сервиса
+> cd ../cmd/
+> go run main.go -h 0.0.0.0 -p 3001 -m grpc
+#### Запуск утилиты создание отчетов
+> cd ../cmd/test_reporter
+> go run main.go reporter.go
 
 # Нейронные сети
 ### Установка ultralytics
 > conda install -c conda-forge ultralytics
 
 # Запуск проекта
-### Запуск тестов
-> go test -v services/go_nn/src/cmd/main_test.go
 ### Запуск с флагами
 > go run services/go_nn/src/cmd/main.go -h 0.0.0.0 -p 8080 -m http

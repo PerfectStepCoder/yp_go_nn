@@ -60,7 +60,7 @@ func main() {
 		case "http":
 			server, serverErr = servers.NewHTTPServer(mainStorage, nn)
 		case "grpc":
-			server, serverErr = servers.NewHTTPServer(mainStorage, nn)
+			server, serverErr = servers.NewServerGRPC(nn)
 		default:
 			log.Fatalf("Not support protocol: %s", settings.ServiceProtocol)
 	}

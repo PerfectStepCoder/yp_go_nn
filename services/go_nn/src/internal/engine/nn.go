@@ -72,6 +72,7 @@ func (a *OnnxNeuralNetwork) DetectRaw(images [][]float32) (labels [][]float32, n
 	return result, err
 }
 
+// DetectCode - обработка батчи с картинками [N, Image] Image - одномерный массив с float картинки
 func (a *OnnxNeuralNetwork) DetectCode(images [][]float32) (labelClassCode []int, nnError error) {
 	
 	if labels, err := a.DetectRaw(images); err != nil {

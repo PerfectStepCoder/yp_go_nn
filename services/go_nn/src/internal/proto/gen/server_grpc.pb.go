@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ClassifyNN_CreateTask_FullMethodName = "/nn_go.ClassifyNN/CreateTask"
+	ClassifyNN_CreateOneTask_FullMethodName = "/nn_go.ClassifyNN/CreateOneTask"
 )
 
 // ClassifyNNClient is the client API for ClassifyNN service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClassifyNNClient interface {
-	CreateTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error)
+	CreateOneTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error)
 }
 
 type classifyNNClient struct {
@@ -37,10 +37,10 @@ func NewClassifyNNClient(cc grpc.ClientConnInterface) ClassifyNNClient {
 	return &classifyNNClient{cc}
 }
 
-func (c *classifyNNClient) CreateTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error) {
+func (c *classifyNNClient) CreateOneTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TaskOneResponse)
-	err := c.cc.Invoke(ctx, ClassifyNN_CreateTask_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ClassifyNN_CreateOneTask_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *classifyNNClient) CreateTask(ctx context.Context, in *TaskOneRequest, o
 // All implementations must embed UnimplementedClassifyNNServer
 // for forward compatibility.
 type ClassifyNNServer interface {
-	CreateTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error)
+	CreateOneTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error)
 	mustEmbedUnimplementedClassifyNNServer()
 }
 
@@ -62,8 +62,8 @@ type ClassifyNNServer interface {
 // pointer dereference when methods are called.
 type UnimplementedClassifyNNServer struct{}
 
-func (UnimplementedClassifyNNServer) CreateTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
+func (UnimplementedClassifyNNServer) CreateOneTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOneTask not implemented")
 }
 func (UnimplementedClassifyNNServer) mustEmbedUnimplementedClassifyNNServer() {}
 func (UnimplementedClassifyNNServer) testEmbeddedByValue()                    {}
@@ -86,20 +86,20 @@ func RegisterClassifyNNServer(s grpc.ServiceRegistrar, srv ClassifyNNServer) {
 	s.RegisterService(&ClassifyNN_ServiceDesc, srv)
 }
 
-func _ClassifyNN_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ClassifyNN_CreateOneTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TaskOneRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClassifyNNServer).CreateTask(ctx, in)
+		return srv.(ClassifyNNServer).CreateOneTask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ClassifyNN_CreateTask_FullMethodName,
+		FullMethod: ClassifyNN_CreateOneTask_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassifyNNServer).CreateTask(ctx, req.(*TaskOneRequest))
+		return srv.(ClassifyNNServer).CreateOneTask(ctx, req.(*TaskOneRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -112,8 +112,8 @@ var ClassifyNN_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ClassifyNNServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateTask",
-			Handler:    _ClassifyNN_CreateTask_Handler,
+			MethodName: "CreateOneTask",
+			Handler:    _ClassifyNN_CreateOneTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
