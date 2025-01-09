@@ -37,5 +37,5 @@ func main() {
 	c := pb.NewClassifyNNClient(conn)
 
 	// Функция для выполнения тестирования
-	DoReport(c)
+	DoReportBatch(c)
 }

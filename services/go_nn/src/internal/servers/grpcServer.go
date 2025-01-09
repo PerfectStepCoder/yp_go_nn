@@ -2,6 +2,7 @@ package servers
 
 import (
 	"context"
+	"fmt"
 	//"fmt"
 	"log"
 	"net"
@@ -25,16 +26,66 @@ type ServerGRPC struct {
 func (s *ServerGRPC) CreateOneTask(ctx context.Context, in *pb.TaskOneRequest) (*pb.TaskOneResponse, error) {
 	var response pb.TaskOneResponse
 
-	images, err := engine.BytesToFloat32Matrix(in.Image, int(in.Height), int(in.Width))
+	image, err := engine.BytesToFloat32Matrix(in.Image, int(in.Height), int(in.Width))
 
 	if err != nil {
 		return nil, err
 	}
 
-	labelClassNames, err := s.nn.Detect(images)
+	labelClassNames, err := s.nn.Detect(image)
 
 	response.TaskUID = in.TaskUID
 	response.ClassName = labelClassNames[0]
+
+	return &response, nil
+}
+
+// CreateBatchTask - отправляем изображение для классификации.
+func (s *ServerGRPC) CreateBatchTask(ctx context.Context, in *pb.TaskBatchRequest) (*pb.TaskBatchResponse, error) {
+	var response pb.TaskBatchResponse
+
+	images := make([][]float32, len(in.Images))
+
+	for i , image := range in.Images {
+		img, err := engine.BytesToFloat32Slice(image)
+		if err != nil {
+			fmt.Println(err)
+		}
+		images[i] = img
+	}
+	
+	labelClassNames, err := s.nn.Detect(images)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	response.TaskUID = in.TaskUID
+	response.ClassNames = labelClassNames
+
+	return &response, nil
+}
+
+// CreateBatchCodeTask - отправляем батч изображений для классификации.
+func (s *ServerGRPC) CreateBatchCodeTask(ctx context.Context, in *pb.TaskBatchRequest) (*pb.TaskBatchCodeResponse, error) {
+	var response pb.TaskBatchCodeResponse
+
+	images := make([][]float32, len(in.Images))
+
+	for i , image := range in.Images {
+		img, err := engine.BytesToFloat32Slice(image)
+		if err != nil {
+			fmt.Println(err)
+		}
+		images[i] = img
+	}
+	
+	labelClassCodes, err := s.nn.DetectCode(images)
+	if err != nil {
+		fmt.Println(err)
+	}
+	
+	response.TaskUID = in.TaskUID
+	response.ClassCodes = engine.IntToInt32Slice(labelClassCodes)
 
 	return &response, nil
 }

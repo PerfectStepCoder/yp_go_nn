@@ -7,9 +7,9 @@ option go_package = "service/nn_go";
 // TaskOneRequest - передача изображения для классификации.
 message TaskOneRequest {
   string taskUID = 1;  // UUID задачи в строковом формате
-  bytes image = 2;     // файл изображения в виде массива байтов
+  bytes image = 2;     // изображение в виде массива байтов
   int32 height = 3;    // изображения
-  int32 width = 4;      // изображения
+  int32 width = 4;     // изображения
 }
 
 // TaskOneResponse - описание ответа
@@ -21,7 +21,7 @@ message TaskOneResponse {
 // TaskBatchRequest - передача изображения для классификации.
 message TaskBatchRequest {
   string taskUID = 1;   // UUID задачи в строковом формате
-  bytes images = 2;     // файл изображения в виде массива байтов
+  repeated bytes images = 2;  // изображения в виде массива байтов
   int32 height = 3;     // изображения
   int32 width = 4;      // изображения
 }

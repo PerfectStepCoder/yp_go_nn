@@ -27,7 +27,7 @@ type TaskOneRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	TaskUID string `protobuf:"bytes,1,opt,name=taskUID,proto3" json:"taskUID,omitempty"` // UUID задачи в строковом формате
-	Image   []byte `protobuf:"bytes,2,opt,name=image,proto3" json:"image,omitempty"`     // файл изображения в виде массива байтов
+	Image   []byte `protobuf:"bytes,2,opt,name=image,proto3" json:"image,omitempty"`     // изображение в виде массива байтов
 	Height  int32  `protobuf:"varint,3,opt,name=height,proto3" json:"height,omitempty"`  // изображения
 	Width   int32  `protobuf:"varint,4,opt,name=width,proto3" json:"width,omitempty"`    // изображения
 }
@@ -144,6 +144,184 @@ func (x *TaskOneResponse) GetClassName() string {
 	return ""
 }
 
+// TaskBatchRequest - передача изображения для классификации.
+type TaskBatchRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TaskUID string   `protobuf:"bytes,1,opt,name=taskUID,proto3" json:"taskUID,omitempty"` // UUID задачи в строковом формате
+	Images  [][]byte `protobuf:"bytes,2,rep,name=images,proto3" json:"images,omitempty"`   // изображения в виде массива байтов
+	Height  int32    `protobuf:"varint,3,opt,name=height,proto3" json:"height,omitempty"`  // изображения
+	Width   int32    `protobuf:"varint,4,opt,name=width,proto3" json:"width,omitempty"`    // изображения
+}
+
+func (x *TaskBatchRequest) Reset() {
+	*x = TaskBatchRequest{}
+	mi := &file_models_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskBatchRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskBatchRequest) ProtoMessage() {}
+
+func (x *TaskBatchRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_models_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskBatchRequest.ProtoReflect.Descriptor instead.
+func (*TaskBatchRequest) Descriptor() ([]byte, []int) {
+	return file_models_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *TaskBatchRequest) GetTaskUID() string {
+	if x != nil {
+		return x.TaskUID
+	}
+	return ""
+}
+
+func (x *TaskBatchRequest) GetImages() [][]byte {
+	if x != nil {
+		return x.Images
+	}
+	return nil
+}
+
+func (x *TaskBatchRequest) GetHeight() int32 {
+	if x != nil {
+		return x.Height
+	}
+	return 0
+}
+
+func (x *TaskBatchRequest) GetWidth() int32 {
+	if x != nil {
+		return x.Width
+	}
+	return 0
+}
+
+// TaskBatchResponse - описание ответа
+type TaskBatchResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TaskUID    string   `protobuf:"bytes,1,opt,name=taskUID,proto3" json:"taskUID,omitempty"`
+	ClassNames []string `protobuf:"bytes,2,rep,name=classNames,proto3" json:"classNames,omitempty"` // массив имен классов
+}
+
+func (x *TaskBatchResponse) Reset() {
+	*x = TaskBatchResponse{}
+	mi := &file_models_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskBatchResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskBatchResponse) ProtoMessage() {}
+
+func (x *TaskBatchResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_models_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskBatchResponse.ProtoReflect.Descriptor instead.
+func (*TaskBatchResponse) Descriptor() ([]byte, []int) {
+	return file_models_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *TaskBatchResponse) GetTaskUID() string {
+	if x != nil {
+		return x.TaskUID
+	}
+	return ""
+}
+
+func (x *TaskBatchResponse) GetClassNames() []string {
+	if x != nil {
+		return x.ClassNames
+	}
+	return nil
+}
+
+// TaskBatchCodeResponse - описание ответа
+type TaskBatchCodeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TaskUID    string  `protobuf:"bytes,1,opt,name=taskUID,proto3" json:"taskUID,omitempty"`
+	ClassCodes []int32 `protobuf:"varint,2,rep,packed,name=classCodes,proto3" json:"classCodes,omitempty"` // массив кодов классов
+}
+
+func (x *TaskBatchCodeResponse) Reset() {
+	*x = TaskBatchCodeResponse{}
+	mi := &file_models_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskBatchCodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskBatchCodeResponse) ProtoMessage() {}
+
+func (x *TaskBatchCodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_models_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskBatchCodeResponse.ProtoReflect.Descriptor instead.
+func (*TaskBatchCodeResponse) Descriptor() ([]byte, []int) {
+	return file_models_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *TaskBatchCodeResponse) GetTaskUID() string {
+	if x != nil {
+		return x.TaskUID
+	}
+	return ""
+}
+
+func (x *TaskBatchCodeResponse) GetClassCodes() []int32 {
+	if x != nil {
+		return x.ClassCodes
+	}
+	return nil
+}
+
 var File_models_proto protoreflect.FileDescriptor
 
 var file_models_proto_rawDesc = []byte{
@@ -160,8 +338,25 @@ var file_models_proto_rawDesc = []byte{
 	0x55, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74, 0x61, 0x73, 0x6b, 0x55,
 	0x49, 0x44, 0x12, 0x1c, 0x0a, 0x09, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x4e, 0x61, 0x6d, 0x65, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x4e, 0x61, 0x6d, 0x65,
-	0x42, 0x0f, 0x5a, 0x0d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x6e, 0x6e, 0x5f, 0x67,
-	0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0x72, 0x0a, 0x10, 0x54, 0x61, 0x73, 0x6b, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x74, 0x61, 0x73, 0x6b, 0x55, 0x49, 0x44, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74, 0x61, 0x73, 0x6b, 0x55, 0x49, 0x44, 0x12, 0x16,
+	0x0a, 0x06, 0x69, 0x6d, 0x61, 0x67, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x06,
+	0x69, 0x6d, 0x61, 0x67, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x14,
+	0x0a, 0x05, 0x77, 0x69, 0x64, 0x74, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x77,
+	0x69, 0x64, 0x74, 0x68, 0x22, 0x4d, 0x0a, 0x11, 0x54, 0x61, 0x73, 0x6b, 0x42, 0x61, 0x74, 0x63,
+	0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x74, 0x61, 0x73,
+	0x6b, 0x55, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74, 0x61, 0x73, 0x6b,
+	0x55, 0x49, 0x44, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x4e, 0x61, 0x6d, 0x65,
+	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x4e, 0x61,
+	0x6d, 0x65, 0x73, 0x22, 0x51, 0x0a, 0x15, 0x54, 0x61, 0x73, 0x6b, 0x42, 0x61, 0x74, 0x63, 0x68,
+	0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07,
+	0x74, 0x61, 0x73, 0x6b, 0x55, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74,
+	0x61, 0x73, 0x6b, 0x55, 0x49, 0x44, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x43,
+	0x6f, 0x64, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x05, 0x52, 0x0a, 0x63, 0x6c, 0x61, 0x73,
+	0x73, 0x43, 0x6f, 0x64, 0x65, 0x73, 0x42, 0x0f, 0x5a, 0x0d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x2f, 0x6e, 0x6e, 0x5f, 0x67, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -176,10 +371,13 @@ func file_models_proto_rawDescGZIP() []byte {
 	return file_models_proto_rawDescData
 }
 
-var file_models_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_models_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_models_proto_goTypes = []any{
-	(*TaskOneRequest)(nil),  // 0: nn_go.TaskOneRequest
-	(*TaskOneResponse)(nil), // 1: nn_go.TaskOneResponse
+	(*TaskOneRequest)(nil),        // 0: nn_go.TaskOneRequest
+	(*TaskOneResponse)(nil),       // 1: nn_go.TaskOneResponse
+	(*TaskBatchRequest)(nil),      // 2: nn_go.TaskBatchRequest
+	(*TaskBatchResponse)(nil),     // 3: nn_go.TaskBatchResponse
+	(*TaskBatchCodeResponse)(nil), // 4: nn_go.TaskBatchCodeResponse
 }
 var file_models_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -200,7 +398,7 @@ func file_models_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_models_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

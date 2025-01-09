@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ClassifyNN_CreateOneTask_FullMethodName = "/nn_go.ClassifyNN/CreateOneTask"
+	ClassifyNN_CreateOneTask_FullMethodName       = "/nn_go.ClassifyNN/CreateOneTask"
+	ClassifyNN_CreateBatchTask_FullMethodName     = "/nn_go.ClassifyNN/CreateBatchTask"
+	ClassifyNN_CreateBatchCodeTask_FullMethodName = "/nn_go.ClassifyNN/CreateBatchCodeTask"
 )
 
 // ClassifyNNClient is the client API for ClassifyNN service.
@@ -27,6 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClassifyNNClient interface {
 	CreateOneTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error)
+	CreateBatchTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchResponse, error)
+	CreateBatchCodeTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchCodeResponse, error)
 }
 
 type classifyNNClient struct {
@@ -47,11 +51,33 @@ func (c *classifyNNClient) CreateOneTask(ctx context.Context, in *TaskOneRequest
 	return out, nil
 }
 
+func (c *classifyNNClient) CreateBatchTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TaskBatchResponse)
+	err := c.cc.Invoke(ctx, ClassifyNN_CreateBatchTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classifyNNClient) CreateBatchCodeTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TaskBatchCodeResponse)
+	err := c.cc.Invoke(ctx, ClassifyNN_CreateBatchCodeTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClassifyNNServer is the server API for ClassifyNN service.
 // All implementations must embed UnimplementedClassifyNNServer
 // for forward compatibility.
 type ClassifyNNServer interface {
 	CreateOneTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error)
+	CreateBatchTask(context.Context, *TaskBatchRequest) (*TaskBatchResponse, error)
+	CreateBatchCodeTask(context.Context, *TaskBatchRequest) (*TaskBatchCodeResponse, error)
 	mustEmbedUnimplementedClassifyNNServer()
 }
 
@@ -64,6 +90,12 @@ type UnimplementedClassifyNNServer struct{}
 
 func (UnimplementedClassifyNNServer) CreateOneTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOneTask not implemented")
+}
+func (UnimplementedClassifyNNServer) CreateBatchTask(context.Context, *TaskBatchRequest) (*TaskBatchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBatchTask not implemented")
+}
+func (UnimplementedClassifyNNServer) CreateBatchCodeTask(context.Context, *TaskBatchRequest) (*TaskBatchCodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBatchCodeTask not implemented")
 }
 func (UnimplementedClassifyNNServer) mustEmbedUnimplementedClassifyNNServer() {}
 func (UnimplementedClassifyNNServer) testEmbeddedByValue()                    {}
@@ -104,6 +136,42 @@ func _ClassifyNN_CreateOneTask_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClassifyNN_CreateBatchTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskBatchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassifyNNServer).CreateBatchTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ClassifyNN_CreateBatchTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassifyNNServer).CreateBatchTask(ctx, req.(*TaskBatchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClassifyNN_CreateBatchCodeTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskBatchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassifyNNServer).CreateBatchCodeTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ClassifyNN_CreateBatchCodeTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassifyNNServer).CreateBatchCodeTask(ctx, req.(*TaskBatchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ClassifyNN_ServiceDesc is the grpc.ServiceDesc for ClassifyNN service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +182,14 @@ var ClassifyNN_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateOneTask",
 			Handler:    _ClassifyNN_CreateOneTask_Handler,
+		},
+		{
+			MethodName: "CreateBatchTask",
+			Handler:    _ClassifyNN_CreateBatchTask_Handler,
+		},
+		{
+			MethodName: "CreateBatchCodeTask",
+			Handler:    _ClassifyNN_CreateBatchCodeTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
