@@ -20,16 +20,26 @@
 
 ### GRPC
 #### Кодогенерация
-Go доступность в консоле
+##### Go доступность в консоле
 > export PATH="$PATH:$(go env GOPATH)/bin"
 > cd ../internal/proto
 > protoc --go_out=./gen --go_opt=paths=source_relative --go-grpc_out=./gen --go-grpc_opt=paths=source_relative models.proto server.proto
+##### Python
+Установка
+> pip install --upgrade grpcio grpcio-tools
+> python -m grpc_tools.protoc --version
+Генерация
+> python -m grpc_tools.protoc -I . --python_out=./gen_py --pyi_out=./gen_py --grpc_python_out=./gen_py ./models.proto ./server.proto
+-I .: Указывает путь к директории, где находятся файлы .proto. Текущая директория обозначена как .
+--python_out=.: Указывает путь для генерации файлов Python, содержащих структуры данных из .proto
+--grpc_python_out=.: Указывает путь для генерации файлов Python, содержащих определения gRPC-сервисов 
+example.proto: Имя файла .proto, который вы хотите обработать.
 #### Запуск сервиса
 > cd ../cmd/
 > go run main.go -h 0.0.0.0 -p 3001 -m grpc
 #### Запуск утилиты создание отчетов
 > cd ../cmd/test_reporter
-> go run main.go reporter.go
+> go run main.go reporter.go settings.go
 
 # Нейронные сети
 ### Установка ultralytics

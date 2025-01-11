@@ -38,3 +38,9 @@ message TaskBatchCodeResponse {
   repeated int32 classCodes = 2;  // массив кодов классов
 }
 
+// TaskOneRequest - передача изображения для классификации.
+message ServiceInfoNN {
+  string name = 1;          // имя модели нейронной сети
+  string description = 2;   // описание
+  string version = 3;       // версия
+}

@@ -322,6 +322,68 @@ func (x *TaskBatchCodeResponse) GetClassCodes() []int32 {
 	return nil
 }
 
+// TaskOneRequest - передача изображения для классификации.
+type ServiceInfoNN struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`               // имя модели нейронной сети
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"` // описание
+	Version     string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`         // версия
+}
+
+func (x *ServiceInfoNN) Reset() {
+	*x = ServiceInfoNN{}
+	mi := &file_models_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ServiceInfoNN) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ServiceInfoNN) ProtoMessage() {}
+
+func (x *ServiceInfoNN) ProtoReflect() protoreflect.Message {
+	mi := &file_models_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ServiceInfoNN.ProtoReflect.Descriptor instead.
+func (*ServiceInfoNN) Descriptor() ([]byte, []int) {
+	return file_models_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ServiceInfoNN) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ServiceInfoNN) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *ServiceInfoNN) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
 var File_models_proto protoreflect.FileDescriptor
 
 var file_models_proto_rawDesc = []byte{
@@ -355,8 +417,14 @@ var file_models_proto_rawDesc = []byte{
 	0x74, 0x61, 0x73, 0x6b, 0x55, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74,
 	0x61, 0x73, 0x6b, 0x55, 0x49, 0x44, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x43,
 	0x6f, 0x64, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x05, 0x52, 0x0a, 0x63, 0x6c, 0x61, 0x73,
-	0x73, 0x43, 0x6f, 0x64, 0x65, 0x73, 0x42, 0x0f, 0x5a, 0x0d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x2f, 0x6e, 0x6e, 0x5f, 0x67, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x43, 0x6f, 0x64, 0x65, 0x73, 0x22, 0x5f, 0x0a, 0x0d, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x49, 0x6e, 0x66, 0x6f, 0x4e, 0x4e, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64,
+	0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a,
+	0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x0f, 0x5a, 0x0d, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x2f, 0x6e, 0x6e, 0x5f, 0x67, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -371,13 +439,14 @@ func file_models_proto_rawDescGZIP() []byte {
 	return file_models_proto_rawDescData
 }
 
-var file_models_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_models_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_models_proto_goTypes = []any{
 	(*TaskOneRequest)(nil),        // 0: nn_go.TaskOneRequest
 	(*TaskOneResponse)(nil),       // 1: nn_go.TaskOneResponse
 	(*TaskBatchRequest)(nil),      // 2: nn_go.TaskBatchRequest
 	(*TaskBatchResponse)(nil),     // 3: nn_go.TaskBatchResponse
 	(*TaskBatchCodeResponse)(nil), // 4: nn_go.TaskBatchCodeResponse
+	(*ServiceInfoNN)(nil),         // 5: nn_go.ServiceInfoNN
 }
 var file_models_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -398,7 +467,7 @@ func file_models_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_models_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

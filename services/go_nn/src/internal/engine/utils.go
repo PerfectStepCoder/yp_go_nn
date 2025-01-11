@@ -2,8 +2,9 @@ package engine
 
 import (
 	"bytes"
-	"fmt"
 	"encoding/binary"
+	"fmt"
+
 	//"errors"
 	"math"
 )
@@ -32,8 +33,12 @@ func FindMaxIndices(labels [][]float32) []int {
 	return maxIndices
 }
 
+type Integer interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
+}
+
 // Функция для сравнения двух массивов
-func CompareArrays(arr1, arr2 []int) bool {
+func CompareArrays[T Integer](arr1, arr2 []T) bool {
 	// Проверяем, что массивы одинаковой длины
 	if len(arr1) != len(arr2) {
 		return false
@@ -50,7 +55,7 @@ func CompareArrays(arr1, arr2 []int) bool {
 }
 
 // Функция для подсчета процента совпадений
-func CalculateMatchPercentage(arr1, arr2 []int) float64 {
+func CalculateMatchPercentage[T Integer](arr1, arr2 []T) float64 {
 	// Проверяем, что массивы одинаковой длины
 	if len(arr1) != len(arr2) {
 		return 0 // Если массивы разной длины, процент совпадений невозможен

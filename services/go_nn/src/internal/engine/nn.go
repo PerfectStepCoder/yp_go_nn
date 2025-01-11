@@ -56,7 +56,7 @@ func (a *OnnxNeuralNetwork) DetectRaw(images [][]float32) (labels [][]float32, n
     outputTensor, _ := ort.NewEmptyTensor[float32](outputShape)
     defer outputTensor.Destroy()
 
-    session, _ := ort.NewAdvancedSession(a.PathToOnnxModelFile,  //yolo_fashion_mnist  yolo11n
+    session, _ := ort.NewAdvancedSession(a.PathToOnnxModelFile,
         []string{a.InputLayer.Name}, []string{a.OutputLayer.Name},
         []ort.Value{inputTensor}, []ort.Value{outputTensor}, nil)
     defer session.Destroy()

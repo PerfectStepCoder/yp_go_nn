@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,6 +20,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	ClassifyNN_GetInfo_FullMethodName             = "/nn_go.ClassifyNN/GetInfo"
 	ClassifyNN_CreateOneTask_FullMethodName       = "/nn_go.ClassifyNN/CreateOneTask"
 	ClassifyNN_CreateBatchTask_FullMethodName     = "/nn_go.ClassifyNN/CreateBatchTask"
 	ClassifyNN_CreateBatchCodeTask_FullMethodName = "/nn_go.ClassifyNN/CreateBatchCodeTask"
@@ -28,6 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClassifyNNClient interface {
+	GetInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ServiceInfoNN, error)
 	CreateOneTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error)
 	CreateBatchTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchResponse, error)
 	CreateBatchCodeTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchCodeResponse, error)
@@ -39,6 +42,16 @@ type classifyNNClient struct {
 
 func NewClassifyNNClient(cc grpc.ClientConnInterface) ClassifyNNClient {
 	return &classifyNNClient{cc}
+}
+
+func (c *classifyNNClient) GetInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ServiceInfoNN, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ServiceInfoNN)
+	err := c.cc.Invoke(ctx, ClassifyNN_GetInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *classifyNNClient) CreateOneTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error) {
@@ -75,6 +88,7 @@ func (c *classifyNNClient) CreateBatchCodeTask(ctx context.Context, in *TaskBatc
 // All implementations must embed UnimplementedClassifyNNServer
 // for forward compatibility.
 type ClassifyNNServer interface {
+	GetInfo(context.Context, *emptypb.Empty) (*ServiceInfoNN, error)
 	CreateOneTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error)
 	CreateBatchTask(context.Context, *TaskBatchRequest) (*TaskBatchResponse, error)
 	CreateBatchCodeTask(context.Context, *TaskBatchRequest) (*TaskBatchCodeResponse, error)
@@ -88,6 +102,9 @@ type ClassifyNNServer interface {
 // pointer dereference when methods are called.
 type UnimplementedClassifyNNServer struct{}
 
+func (UnimplementedClassifyNNServer) GetInfo(context.Context, *emptypb.Empty) (*ServiceInfoNN, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfo not implemented")
+}
 func (UnimplementedClassifyNNServer) CreateOneTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateOneTask not implemented")
 }
@@ -116,6 +133,24 @@ func RegisterClassifyNNServer(s grpc.ServiceRegistrar, srv ClassifyNNServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&ClassifyNN_ServiceDesc, srv)
+}
+
+func _ClassifyNN_GetInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassifyNNServer).GetInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ClassifyNN_GetInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassifyNNServer).GetInfo(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _ClassifyNN_CreateOneTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -179,6 +214,10 @@ var ClassifyNN_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "nn_go.ClassifyNN",
 	HandlerType: (*ClassifyNNServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetInfo",
+			Handler:    _ClassifyNN_GetInfo_Handler,
+		},
 		{
 			MethodName: "CreateOneTask",
 			Handler:    _ClassifyNN_CreateOneTask_Handler,

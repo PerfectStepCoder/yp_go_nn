@@ -3,16 +3,13 @@ package servers
 import (
 	"context"
 	"fmt"
-	//"fmt"
 	"log"
 	"net"
 
 	"github.com/PerfectStepCoder/yp_go_nn/src/internal/engine"
 	pb "github.com/PerfectStepCoder/yp_go_nn/src/internal/proto/gen"
 	"google.golang.org/grpc"
-	//"github.com/PerfectStepCoder/yp_go_nn/src/internal/storage"
-	//"google.golang.org/grpc/metadata"
-	//"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // ServerGRPC поддерживает все необходимые методы сервера.
@@ -118,4 +115,12 @@ func (s *ServerGRPC) Stop(ctx context.Context) error {
 	// Остановка сервера с плавным завершением
 	s.server.GracefulStop()
 	return nil
+}
+
+func (s *ServerGRPC) GetInfo(ctx context.Context, in *emptypb.Empty) (*pb.ServiceInfoNN, error)  {
+	var response pb.ServiceInfoNN
+	response.Name = "YoloNN"
+	response.Description = "[Go] Trained Fashion MNIST"
+	response.Version = "1.0.0.0" 
+	return &response, nil
 }

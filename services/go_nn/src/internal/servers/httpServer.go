@@ -43,13 +43,10 @@ func (s *ServerHTTP) Start(addr string) error {
 		r.Route("/operators", func(r chi.Router) {
 			r.Get("/id/{operatorUID}", httpp.GetOperatorByUIDHandler(s.storage))
 			r.Get("/name/{name}", httpp.GetOperatorByNameHandler(s.storage))
-			// r.Get("/rate", httpp.UserRateHandler(s.storage))
 		})
 		// Tasks
 		r.Route("/tasks", func(r chi.Router) {
 			r.Post("/one", httpp.TaskOneHandler(s.storage, s.nn))
-			// r.Post("/continue", httpp.ContinueHandler(s.storage, s.signals))
-			// r.Get("/status/{gameUID}", httpp.StatusHandler(s.storage))
 		})
 	})
 
