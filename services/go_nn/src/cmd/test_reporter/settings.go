@@ -29,6 +29,6 @@ func NewSettings() (*Settings, error) {
 
 func (s Settings) String() string {
 	result := fmt.Sprintf("Settings:\n\tServiceHostOne:%s\n\tServicePortOne:%s\n\tServiceHostTwo:%s\n\tServicePortTwo:%s\n",
-			              s.ServiceHostOne, s.ServicePortOne, s.ServiceHostTwo, s.ServicePortTwo)
+		s.ServiceHostOne, s.ServicePortOne, s.ServiceHostTwo, s.ServicePortTwo)
 	return result
 }

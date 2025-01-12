@@ -25,15 +25,15 @@ func main() {
 	fmt.Println(setting)
 
 	// Устанавливаем соединение с сервером
-	connOne, errOne := grpc.NewClient(fmt.Sprintf("%s:%s", setting.ServiceHostOne, setting.ServicePortOne), 
-	                            grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connOne, errOne := grpc.NewClient(fmt.Sprintf("%s:%s", setting.ServiceHostOne, setting.ServicePortOne),
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if errOne != nil {
 		log.Fatal(errOne)
 	}
 	defer connOne.Close()
 
-	connTwo, errTwo := grpc.NewClient(fmt.Sprintf("%s:%s", setting.ServiceHostTwo, setting.ServicePortTwo), 
-									  grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connTwo, errTwo := grpc.NewClient(fmt.Sprintf("%s:%s", setting.ServiceHostTwo, setting.ServicePortTwo),
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if errTwo != nil {
 		log.Fatal(errTwo)
 	}

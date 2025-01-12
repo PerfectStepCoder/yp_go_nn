@@ -15,7 +15,7 @@ func DoReportSolo(c pb.ClassifyNNClient) {
 
 	// Загрузка датасета
 	batchSize := 200
-	images, _, err := engine.LoadDataset("../../../../../data/datasets/fashion_mnist_test.csv", batchSize)  // labels
+	images, _, err := engine.LoadDataset("../../../../../data/datasets/fashion_mnist_test.csv", batchSize) // labels
 
 	if err != nil {
 		fmt.Printf("Error load of dataset: %v\n", err)
@@ -24,7 +24,7 @@ func DoReportSolo(c pb.ClassifyNNClient) {
 
 	for i, imageBatch := range images {
 
-		imageBatchBytes, err := engine.Float32MatrixToBytes(engine.GetFirstImage(imageBatch)) 
+		imageBatchBytes, err := engine.Float32MatrixToBytes(engine.GetFirstImage(imageBatch))
 		if err != nil {
 			fmt.Printf("Error Float32MatrixToBytes batch: %v\n", err)
 			return
@@ -35,9 +35,9 @@ func DoReportSolo(c pb.ClassifyNNClient) {
 
 		requestTaskOne := pb.TaskOneRequest{
 			TaskUID: uuid.New().String(),
-			Image: imageBatchBytes,
-			Width: int32(width),
-			Height: int32(height),
+			Image:   imageBatchBytes,
+			Width:   int32(width),
+			Height:  int32(height),
 		}
 
 		result, err := c.CreateOneTask(context.Background(), &requestTaskOne)
@@ -46,7 +46,7 @@ func DoReportSolo(c pb.ClassifyNNClient) {
 		}
 
 		fmt.Println(i, result.ClassName)
-		
+
 	}
 
 }
@@ -60,10 +60,10 @@ func DoReportCompareBatch(connectorOne pb.ClassifyNNClient, connectorTwo pb.Clas
 
 	fmt.Printf("NN one:\nName: %s\nDescription: %s\nVersion: %s\n", infoOne.Name, infoOne.Description, infoOne.Version)
 	fmt.Printf("NN one:\nName: %s\nDescription: %s\nVersion: %s\n", infoTwo.Name, infoTwo.Description, infoTwo.Version)
-	
+
 	// Загрузка датасета
 	batchSize := 200
-	images, labels, err := engine.LoadDataset("../../../../../data/datasets/fashion_mnist_test.csv", batchSize)  // labels
+	images, labels, err := engine.LoadDataset("../../../../../data/datasets/fashion_mnist_test.csv", batchSize) // labels
 
 	if err != nil {
 		fmt.Printf("Error load of dataset: %v\n", err)
@@ -74,7 +74,7 @@ func DoReportCompareBatch(connectorOne pb.ClassifyNNClient, connectorTwo pb.Clas
 
 	for i, imageBatch := range images {
 
-		imageBatchBytes, err := engine.Float32ToBytes2D(imageBatch) 
+		imageBatchBytes, err := engine.Float32ToBytes2D(imageBatch)
 		if err != nil {
 			fmt.Printf("Error Float32MatrixToBytes batch: %v\n", err)
 			return
@@ -84,9 +84,9 @@ func DoReportCompareBatch(connectorOne pb.ClassifyNNClient, connectorTwo pb.Clas
 
 		requestTaskBatch := pb.TaskBatchRequest{
 			TaskUID: uuid.New().String(),
-			Images: imageBatchBytes,
-			Width: int32(28),   // размер изображения
-			Height: int32(28),  // размер изображения
+			Images:  imageBatchBytes,
+			Width:   int32(28), // размер изображения
+			Height:  int32(28), // размер изображения
 		}
 
 		resultOne, errOne := connectorOne.CreateBatchCodeTask(context.Background(), &requestTaskBatch) //CreateBatchTask
@@ -112,17 +112,17 @@ func DoReportCompareBatch(connectorOne pb.ClassifyNNClient, connectorTwo pb.Clas
 
 	}
 
-	fmt.Println("Avg accuracy one: ", totalAccuracyOne / float64(len(images)))
-	fmt.Println("Avg accuracy two: ", totalAccuracyTwo / float64(len(images)))
+	fmt.Println("Avg accuracy one: ", totalAccuracyOne/float64(len(images)))
+	fmt.Println("Avg accuracy two: ", totalAccuracyTwo/float64(len(images)))
 
 }
 
 // DoReportPerformance - производительность сервиса
-func DoReportPerformance(c pb.ClassifyNNClient){
+func DoReportPerformance(c pb.ClassifyNNClient) {
 	// Загрузка датасета
 	batchSize := 200
-	images, _, err := engine.LoadDataset("../../../../../data/datasets/fashion_mnist_test.csv", batchSize)  // labels
-	
+	images, _, err := engine.LoadDataset("../../../../../data/datasets/fashion_mnist_test.csv", batchSize) // labels
+
 	if err != nil {
 		fmt.Printf("Error load of dataset: %v\n", err)
 		return
@@ -132,7 +132,7 @@ func DoReportPerformance(c pb.ClassifyNNClient){
 
 	for _, imageBatch := range images {
 
-		imageBatchBytes, err := engine.Float32ToBytes2D(imageBatch) 
+		imageBatchBytes, err := engine.Float32ToBytes2D(imageBatch)
 		if err != nil {
 			fmt.Printf("Error Float32MatrixToBytes batch: %v\n", err)
 			return
@@ -142,9 +142,9 @@ func DoReportPerformance(c pb.ClassifyNNClient){
 
 		requestTaskBatch := pb.TaskBatchRequest{
 			TaskUID: uuid.New().String(),
-			Images: imageBatchBytes,
-			Width: int32(28),   // размер изображения
-			Height: int32(28),  // размер изображения
+			Images:  imageBatchBytes,
+			Width:   int32(28), // размер изображения
+			Height:  int32(28), // размер изображения
 		}
 		batchsRequest.Batchs = append(batchsRequest.Batchs, &requestTaskBatch)
 	}
@@ -155,7 +155,7 @@ func DoReportPerformance(c pb.ClassifyNNClient){
 		return
 	}
 
-	for i, batch := range result.Batchs{
+	for i, batch := range result.Batchs {
 		fmt.Println(i, batch.ClassNames)
 	}
 }

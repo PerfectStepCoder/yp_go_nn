@@ -3,22 +3,22 @@ package servers
 import (
 	"context"
 	"fmt"
-	"log"
-	"net"
-	"runtime"
-	"sync"
 	"github.com/PerfectStepCoder/yp_go_nn/src/internal/engine"
 	pb "github.com/PerfectStepCoder/yp_go_nn/src/internal/proto/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"log"
+	"net"
+	"runtime"
+	"sync"
 )
 
 // ServerGRPC поддерживает все необходимые методы сервера.
 type ServerGRPC struct {
 	nn *engine.OnnxNeuralNetwork
 	pb.UnimplementedClassifyNNServer
-	server *grpc.Server
-	countWorkers int 
+	server       *grpc.Server
+	countWorkers int
 }
 
 // CreateTask - отправляем изображение для классификации.
@@ -45,14 +45,14 @@ func (s *ServerGRPC) CreateBatchTask(ctx context.Context, in *pb.TaskBatchReques
 
 	images := make([][]float32, len(in.Images))
 
-	for i , image := range in.Images {
+	for i, image := range in.Images {
 		img, err := engine.BytesToFloat32Slice(image)
 		if err != nil {
 			fmt.Println(err)
 		}
 		images[i] = img
 	}
-	
+
 	labelClassNames, err := s.nn.Detect(images)
 	if err != nil {
 		fmt.Println(err)
@@ -70,19 +70,19 @@ func (s *ServerGRPC) CreateBatchCodeTask(ctx context.Context, in *pb.TaskBatchRe
 
 	images := make([][]float32, len(in.Images))
 
-	for i , image := range in.Images {
+	for i, image := range in.Images {
 		img, err := engine.BytesToFloat32Slice(image)
 		if err != nil {
 			fmt.Println(err)
 		}
 		images[i] = img
 	}
-	
+
 	labelClassCodes, err := s.nn.DetectCode(images)
 	if err != nil {
 		fmt.Println(err)
 	}
-	
+
 	response.TaskUID = in.TaskUID
 	response.ClassCodes = engine.IntToInt32Slice(labelClassCodes)
 
@@ -118,11 +118,11 @@ func (s *ServerGRPC) CreateBatchsTask(ctx context.Context, in *pb.TaskBatchsRequ
 
 	// Горутинa для закрытия outputCh после завершения всех обработчиков
 	go func() {
-		wg.Wait() // Ожидаем завершения всех горутин
+		wg.Wait()       // Ожидаем завершения всех горутин
 		close(outputCh) // Закрываем outputCh, чтобы завершить чтение из него
 	}()
 
-	for result := range outputCh{
+	for result := range outputCh {
 		response.Batchs = append(response.Batchs, result)
 	}
 
@@ -130,21 +130,21 @@ func (s *ServerGRPC) CreateBatchsTask(ctx context.Context, in *pb.TaskBatchsRequ
 }
 
 func NewServerGRPC(nn *engine.OnnxNeuralNetwork) (*ServerGRPC, error) {
-	
+
 	return &ServerGRPC{
-		nn: nn,
+		nn:           nn,
 		countWorkers: runtime.NumCPU(),
 	}, nil
 }
 
 func (s *ServerGRPC) Start(addr string) error {
-	
+
 	// Cоздаём gRPC-сервер без зарегистрированной службы
 	s.server = grpc.NewServer(
 		grpc.MaxRecvMsgSize(50*1024*1024), // Максимальный размер принимаемого сообщения — 50 МБ
 		grpc.MaxSendMsgSize(50*1024*1024), // Максимальный размер отправляемого сообщения — 50 МБ
 	)
-		
+
 	// Регистрируем сервис
 	pb.RegisterClassifyNNServer(s.server, s)
 
@@ -163,10 +163,10 @@ func (s *ServerGRPC) Stop(ctx context.Context) error {
 	return nil
 }
 
-func (s *ServerGRPC) GetInfo(ctx context.Context, in *emptypb.Empty) (*pb.ServiceInfoNN, error)  {
+func (s *ServerGRPC) GetInfo(ctx context.Context, in *emptypb.Empty) (*pb.ServiceInfoNN, error) {
 	var response pb.ServiceInfoNN
 	response.Name = "YoloNN"
 	response.Description = "[Go] Trained Fashion MNIST"
-	response.Version = "1.0.0.0" 
+	response.Version = "1.0.0.0"
 	return &response, nil
 }
