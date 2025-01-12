@@ -44,5 +44,6 @@ func main() {
 	connectorTwo := pb.NewClassifyNNClient(connTwo)
 
 	// Функция для выполнения тестирования
-	DoReportBatch(connectorOne, connectorTwo)
+	startReporters(connectorOne, connectorTwo)
+
 }

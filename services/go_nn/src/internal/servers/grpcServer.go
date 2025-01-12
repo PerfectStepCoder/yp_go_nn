@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-
+	"runtime"
+	"sync"
 	"github.com/PerfectStepCoder/yp_go_nn/src/internal/engine"
 	pb "github.com/PerfectStepCoder/yp_go_nn/src/internal/proto/gen"
 	"google.golang.org/grpc"
@@ -16,7 +17,8 @@ import (
 type ServerGRPC struct {
 	nn *engine.OnnxNeuralNetwork
 	pb.UnimplementedClassifyNNServer
-	server *grpc.Server 
+	server *grpc.Server
+	countWorkers int 
 }
 
 // CreateTask - отправляем изображение для классификации.
@@ -87,17 +89,61 @@ func (s *ServerGRPC) CreateBatchCodeTask(ctx context.Context, in *pb.TaskBatchRe
 	return &response, nil
 }
 
+func (s *ServerGRPC) CreateBatchsTask(ctx context.Context, in *pb.TaskBatchsRequest) (*pb.TaskBatchsResponse, error) {
+	var response pb.TaskBatchsResponse
+
+	var wg sync.WaitGroup
+	wg.Add(s.countWorkers) // Увеличиваем счетчик для ожидания
+
+	inputCh := make(chan *pb.TaskBatchRequest, len(in.Batchs))
+	outputCh := make(chan *pb.TaskBatchResponse, len(in.Batchs))
+
+	for _, batch := range in.Batchs {
+		inputCh <- batch
+	}
+
+	fmt.Printf("Got batches: %d", len(inputCh))
+	close(inputCh)
+
+	// Обработка батчей
+	for i := 0; i < s.countWorkers; i++ {
+		go func(inputCh chan *pb.TaskBatchRequest, outputCh chan *pb.TaskBatchResponse) {
+			defer wg.Done() // уменьшаем счетчик по завершении работы
+			for batch := range inputCh {
+				result, _ := s.CreateBatchTask(context.Background(), batch)
+				outputCh <- result
+			}
+		}(inputCh, outputCh)
+	}
+
+	// Горутинa для закрытия outputCh после завершения всех обработчиков
+	go func() {
+		wg.Wait() // Ожидаем завершения всех горутин
+		close(outputCh) // Закрываем outputCh, чтобы завершить чтение из него
+	}()
+
+	for result := range outputCh{
+		response.Batchs = append(response.Batchs, result)
+	}
+
+	return &response, nil
+}
+
 func NewServerGRPC(nn *engine.OnnxNeuralNetwork) (*ServerGRPC, error) {
 	
 	return &ServerGRPC{
 		nn: nn,
+		countWorkers: runtime.NumCPU(),
 	}, nil
 }
 
 func (s *ServerGRPC) Start(addr string) error {
 	
 	// Cоздаём gRPC-сервер без зарегистрированной службы
-	s.server = grpc.NewServer()
+	s.server = grpc.NewServer(
+		grpc.MaxRecvMsgSize(50*1024*1024), // Максимальный размер принимаемого сообщения — 50 МБ
+		grpc.MaxSendMsgSize(50*1024*1024), // Максимальный размер отправляемого сообщения — 50 МБ
+	)
 		
 	// Регистрируем сервис
 	pb.RegisterClassifyNNServer(s.server, s)

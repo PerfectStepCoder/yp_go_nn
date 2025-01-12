@@ -11,6 +11,24 @@
 ### Проверка стуктурных тегов
 > go vet -structtag
 
+## Переменные окружения:
+### Хранилище
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=password
+POSTGRES_DB=nn
+POSTGRES_HOST=localhost
+POSTGRES_PORT=6443
+### Сервис
+SERVICE_HOST=localhost
+SERVICE_PORT=8011
+SERVICE_PROTOCOL=http
+SECRET_JWT=ffduyfdb3534Gfdituetr
+### Для утилиты с отчетами
+SERVICE_HOST_ONE=localhost
+SERVICE_PORT_ONE=50051
+SERVICE_HOST_TWO=localhost
+SERVICE_PORT_TWO=3001
+
 ## API
 ### REST HTTP
 #### Создание документации Swagger
@@ -39,7 +57,7 @@ example.proto: Имя файла .proto, который вы хотите обр
 > go run main.go -h 0.0.0.0 -p 3001 -m grpc
 #### Запуск утилиты создание отчетов
 > cd ../cmd/test_reporter
-> go run main.go reporter.go settings.go
+> go run main.go reporter.go settings.go menu.go
 
 # Нейронные сети
 ### Установка ultralytics
@@ -48,3 +66,28 @@ example.proto: Имя файла .proto, который вы хотите обр
 # Запуск проекта
 ### Запуск с флагами
 > go run services/go_nn/src/cmd/main.go -h 0.0.0.0 -p 8080 -m http
+
+# Файловая структура проекта
+| Путь    | Назначение |
+| -------- | ------- |
+| api  | Реализация REST API      |
+| api/docs | Документация Swagger     |
+| cmd    | Точка запуска проекта    |
+| cmd/main.go    | Запуск сервиса (rest или grpc)   |
+| cmd/console    | Отладка и тесты   |
+| cmd/test_reporter    | Утилита сранение нейросетевых сервисов|
+| configs   | Настройки в проекте   |
+| internal   | Внутренее пакеты проекта   |
+| internal/engine   | Функционал для работы с нейронной сетью|
+| internal/engine/loader   | Загрузка данных тестового набора, функции по преобразованию массивов|
+| internal/engine/mnist   | Работа с классами Fashion MNIST|
+| internal/engine/nn   | Нейронная сеть и оnnx формат|
+| internal/engine/utils   | Функции по работе с массивами|
+| models   | Модели сущностей: операторы (пользователи и инженеры) и задачи   |
+| proto   | Описание grpc сущностей а также паки с результатами кодогенерации |
+| security   | Работа с JWT и паролями для REST API|
+| servers   | Реализация нейросетевых сервисов|
+| servers/httpServer   | REST API сервис   |
+| servers/grpcServer   | GRPC сервис  |
+| storage   | Модели для хранения в базе данных   |
+| storage/database   | Реализация хранилища на Postgres |

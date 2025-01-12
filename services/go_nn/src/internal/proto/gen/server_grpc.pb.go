@@ -24,6 +24,7 @@ const (
 	ClassifyNN_CreateOneTask_FullMethodName       = "/nn_go.ClassifyNN/CreateOneTask"
 	ClassifyNN_CreateBatchTask_FullMethodName     = "/nn_go.ClassifyNN/CreateBatchTask"
 	ClassifyNN_CreateBatchCodeTask_FullMethodName = "/nn_go.ClassifyNN/CreateBatchCodeTask"
+	ClassifyNN_CreateBatchsTask_FullMethodName    = "/nn_go.ClassifyNN/CreateBatchsTask"
 )
 
 // ClassifyNNClient is the client API for ClassifyNN service.
@@ -34,6 +35,7 @@ type ClassifyNNClient interface {
 	CreateOneTask(ctx context.Context, in *TaskOneRequest, opts ...grpc.CallOption) (*TaskOneResponse, error)
 	CreateBatchTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchResponse, error)
 	CreateBatchCodeTask(ctx context.Context, in *TaskBatchRequest, opts ...grpc.CallOption) (*TaskBatchCodeResponse, error)
+	CreateBatchsTask(ctx context.Context, in *TaskBatchsRequest, opts ...grpc.CallOption) (*TaskBatchsResponse, error)
 }
 
 type classifyNNClient struct {
@@ -84,6 +86,16 @@ func (c *classifyNNClient) CreateBatchCodeTask(ctx context.Context, in *TaskBatc
 	return out, nil
 }
 
+func (c *classifyNNClient) CreateBatchsTask(ctx context.Context, in *TaskBatchsRequest, opts ...grpc.CallOption) (*TaskBatchsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TaskBatchsResponse)
+	err := c.cc.Invoke(ctx, ClassifyNN_CreateBatchsTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClassifyNNServer is the server API for ClassifyNN service.
 // All implementations must embed UnimplementedClassifyNNServer
 // for forward compatibility.
@@ -92,6 +104,7 @@ type ClassifyNNServer interface {
 	CreateOneTask(context.Context, *TaskOneRequest) (*TaskOneResponse, error)
 	CreateBatchTask(context.Context, *TaskBatchRequest) (*TaskBatchResponse, error)
 	CreateBatchCodeTask(context.Context, *TaskBatchRequest) (*TaskBatchCodeResponse, error)
+	CreateBatchsTask(context.Context, *TaskBatchsRequest) (*TaskBatchsResponse, error)
 	mustEmbedUnimplementedClassifyNNServer()
 }
 
@@ -113,6 +126,9 @@ func (UnimplementedClassifyNNServer) CreateBatchTask(context.Context, *TaskBatch
 }
 func (UnimplementedClassifyNNServer) CreateBatchCodeTask(context.Context, *TaskBatchRequest) (*TaskBatchCodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBatchCodeTask not implemented")
+}
+func (UnimplementedClassifyNNServer) CreateBatchsTask(context.Context, *TaskBatchsRequest) (*TaskBatchsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBatchsTask not implemented")
 }
 func (UnimplementedClassifyNNServer) mustEmbedUnimplementedClassifyNNServer() {}
 func (UnimplementedClassifyNNServer) testEmbeddedByValue()                    {}
@@ -207,6 +223,24 @@ func _ClassifyNN_CreateBatchCodeTask_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClassifyNN_CreateBatchsTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskBatchsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassifyNNServer).CreateBatchsTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ClassifyNN_CreateBatchsTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassifyNNServer).CreateBatchsTask(ctx, req.(*TaskBatchsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ClassifyNN_ServiceDesc is the grpc.ServiceDesc for ClassifyNN service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -229,6 +263,10 @@ var ClassifyNN_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateBatchCodeTask",
 			Handler:    _ClassifyNN_CreateBatchCodeTask_Handler,
+		},
+		{
+			MethodName: "CreateBatchsTask",
+			Handler:    _ClassifyNN_CreateBatchsTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

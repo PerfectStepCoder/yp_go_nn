@@ -51,7 +51,8 @@ func DoReportSolo(c pb.ClassifyNNClient) {
 
 }
 
-func DoReportBatch(connectorOne pb.ClassifyNNClient, connectorTwo pb.ClassifyNNClient) {
+// DoReportBatch - сравнение идентичности работы двух сервисов
+func DoReportCompareBatch(connectorOne pb.ClassifyNNClient, connectorTwo pb.ClassifyNNClient) {
 
 	// Общая информация об нейронных сетях
 	infoOne, _ := connectorOne.GetInfo(context.Background(), &emptypb.Empty{})
@@ -114,4 +115,47 @@ func DoReportBatch(connectorOne pb.ClassifyNNClient, connectorTwo pb.ClassifyNNC
 	fmt.Println("Avg accuracy one: ", totalAccuracyOne / float64(len(images)))
 	fmt.Println("Avg accuracy two: ", totalAccuracyTwo / float64(len(images)))
 
+}
+
+// DoReportPerformance - производительность сервиса
+func DoReportPerformance(c pb.ClassifyNNClient){
+	// Загрузка датасета
+	batchSize := 200
+	images, _, err := engine.LoadDataset("../../../../../data/datasets/fashion_mnist_test.csv", batchSize)  // labels
+	
+	if err != nil {
+		fmt.Printf("Error load of dataset: %v\n", err)
+		return
+	}
+
+	var batchsRequest pb.TaskBatchsRequest
+
+	for _, imageBatch := range images {
+
+		imageBatchBytes, err := engine.Float32ToBytes2D(imageBatch) 
+		if err != nil {
+			fmt.Printf("Error Float32MatrixToBytes batch: %v\n", err)
+			return
+		}
+
+		//height, width := engine.GetMatrixSize(imageBatch)
+
+		requestTaskBatch := pb.TaskBatchRequest{
+			TaskUID: uuid.New().String(),
+			Images: imageBatchBytes,
+			Width: int32(28),   // размер изображения
+			Height: int32(28),  // размер изображения
+		}
+		batchsRequest.Batchs = append(batchsRequest.Batchs, &requestTaskBatch)
+	}
+
+	result, err := c.CreateBatchsTask(context.Background(), &batchsRequest)
+	if err != nil {
+		fmt.Printf("CreateBatchsTask: %v\n", err)
+		return
+	}
+
+	for i, batch := range result.Batchs{
+		fmt.Println(i, batch.ClassNames)
+	}
 }

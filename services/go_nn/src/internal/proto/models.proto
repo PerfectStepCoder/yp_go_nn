@@ -18,7 +18,7 @@ message TaskOneResponse {
   string className = 2;
 }
 
-// TaskBatchRequest - передача изображения для классификации.
+// TaskBatchRequest - передача батч с изображениями для классификации.
 message TaskBatchRequest {
   string taskUID = 1;   // UUID задачи в строковом формате
   repeated bytes images = 2;  // изображения в виде массива байтов
@@ -43,4 +43,14 @@ message ServiceInfoNN {
   string name = 1;          // имя модели нейронной сети
   string description = 2;   // описание
   string version = 3;       // версия
+}
+
+// TaskBatchsRequest - передача батчей с изображениями
+message TaskBatchsRequest {
+  repeated TaskBatchRequest batchs = 1;  // батчи с изображениями для классификации
+}
+
+// TaskBatchsResponse - ответы по обработке батчей с изображениями
+message TaskBatchsResponse {
+  repeated TaskBatchResponse batchs = 1; 
 }

@@ -12,4 +12,5 @@ service ClassifyNN {
   rpc CreateOneTask (TaskOneRequest) returns (TaskOneResponse);
   rpc CreateBatchTask (TaskBatchRequest) returns (TaskBatchResponse);
   rpc CreateBatchCodeTask (TaskBatchRequest) returns (TaskBatchCodeResponse);
+  rpc CreateBatchsTask (TaskBatchsRequest) returns (TaskBatchsResponse);
 }
